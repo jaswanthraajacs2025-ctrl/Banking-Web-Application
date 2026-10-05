@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Apex Horizon Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/banking-theme.css}">
+</head>
+<body>
+
+    <!-- Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Fragment -->
+        <div th:replace="~{fragments/sidebar :: sidebar('dashboard')}"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid p-0">
+
+                <!-- Flash Alerts -->
+                <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+                <!-- Welcome Header Banner -->
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+                    <div>
+                        <h2 class="fw-bold mb-1">Hello, <span th:text="${user.fullName}">Alexander Wright</span> 👋</h2>
+                        <div class="d-flex align-items-center gap-2 text-muted small">
+                            <span>Account No:</span>
+                            <span class="fw-bold font-monospace text-dark" th:if="${account != null}" th:text="${account.accountNumber}">ACC1000889901</span>
+                            <button class="btn btn-sm btn-link text-decoration-none p-0 copy-btn" 
+                                    th:if="${account != null}" th:attr="data-copy=${account.accountNumber}" title="Copy Account Number">
+                                <i class="bi bi-copy"></i>
+                            </button>
+                            <span class="mx-1">•</span>
+                            <span class="badge badge-soft-info" th:if="${account != null}" th:text="${account.accountType}">SAVINGS</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/customer/transfer}" class="btn btn-primary-bank rounded-pill">
+                            <i class="bi bi-arrow-left-right me-1"></i> Quick Transfer
+                        </a>
+                        <a th:href="@{/customer/deposit}" class="btn btn-outline-success rounded-pill">
+                            <i class="bi bi-plus-circle me-1"></i> Add Funds
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Financial Metric Cards Row -->
+                <div class="row g-3 mb-4">
+                    <!-- Total Balance -->
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="banking-card metric-card metric-success">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="metric-label">Total Balance</div>
+                                    <div class="metric-value" th:if="${account != null}">$<span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}">25,450.00</span></div>
+                                    <div class="metric-value" th:if="${account == null}">$0.00</div>
+                                </div>
+                                <div class="metric-icon-box bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-cash-stack"></i>
+                                </div>
+                            </div>
+                            <small class="text-muted mt-2 d-block" style="font-size: 0.75rem;">Status: <strong class="text-success" th:text="${account != null ? account.status : 'N/A'}">ACTIVE</strong></small>
+                        </div>
+                    </div>
+
+                    <!-- Available Balance -->
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="banking-card metric-card metric-info">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="metric-label">Available to Spend</div>
+                                    <div class="metric-value" th:if="${account != null}">$<span th:text="${#numbers.formatDecimal(account.availableBalance, 1, 'COMMA', 2, 'POINT')}">25,450.00</span></div>
+                                    <div class="metric-value" th:if="${account == null}">$0.00</div>
+                                </div>
+                                <div class="metric-icon-box bg-info bg-opacity-10 text-info">
+                                    <i class="bi bi-wallet-fill"></i>
+                                </div>
+                            </div>
+                            <small class="text-muted mt-2 d-block" style="font-size: 0.75rem;">Limit: $<span th:text="${account != null ? account.dailyTransferLimit : '50,000.00'}">50,000.00</span> / day</small>
+                        </div>
+                    </div>
+
+                    <!-- Total Inflow -->
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="banking-card metric-card metric-success">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="metric-label">Total Inflow (Income)</div>
+                                    <div class="metric-value text-success">+$<span th:text="${#numbers.formatDecimal(totalIncome, 1, 'COMMA', 2, 'POINT')}">33,500.00</span></div>
+                                </div>
+                                <div class="metric-icon-box bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-arrow-down-left"></i>
+                                </div>
+                            </div>
+                            <small class="text-muted mt-2 d-block" style="font-size: 0.75rem;">Deposits, Transfers, Loans</small>
+                        </div>
+                    </div>
+
+                    <!-- Total Outflow -->
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="banking-card metric-card metric-danger">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="metric-label">Total Outflow (Expenses)</div>
+                                    <div class="metric-value text-danger">-$<span th:text="${#numbers.formatDecimal(totalExpenses, 1, 'COMMA', 2, 'POINT')}">8,030.80</span></div>
+                                </div>
+                                <div class="metric-icon-box bg-danger bg-opacity-10 text-danger">
+                                    <i class="bi bi-arrow-up-right"></i>
+                                </div>
+                            </div>
+                            <small class="text-muted mt-2 d-block" style="font-size: 0.75rem;">Transfers, Withdrawals, Bills</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Buttons Row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-4 col-md-2">
+                        <a th:href="@{/customer/transfer}" class="quick-action-btn">
+                            <div class="quick-action-icon bg-primary bg-opacity-10 text-primary">
+                                <i class="bi bi-arrow-left-right"></i>
+                            </div>
+                            <span>Transfer</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <a th:href="@{/customer/deposit}" class="quick-action-btn">
+                            <div class="quick-action-icon bg-success bg-opacity-10 text-success">
+                                <i class="bi bi-box-arrow-down"></i>
+                            </div>
+                            <span>Deposit</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <a th:href="@{/customer/withdraw}" class="quick-action-btn">
+                            <div class="quick-action-icon bg-danger bg-opacity-10 text-danger">
+                                <i class="bi bi-box-arrow-up"></i>
+                            </div>
+                            <span>Withdraw</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <a th:href="@{/customer/cards}" class="quick-action-btn">
+                            <div class="quick-action-icon bg-warning bg-opacity-10 text-warning">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+                            <span>Cards</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <a th:href="@{/customer/loans}" class="quick-action-btn">
+                            <div class="quick-action-icon bg-info bg-opacity-10 text-info">
+                                <i class="bi bi-cash-coin"></i>
+                            </div>
+                            <span>Loans</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <a th:href="@{/customer/transactions}" class="quick-action-btn">
+                            <div class="quick-action-icon bg-secondary bg-opacity-10 text-secondary">
+                                <i class="bi bi-file-earmark-spreadsheet"></i>
+                            </div>
+                            <span>Statements</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Main Grid: Charts & Activity -->
+                <div class="row g-4 mb-4">
+                    <!-- Left Column: Activity Chart & Recent Transactions -->
+                    <div class="col-lg-8">
+                        <!-- Activity Chart -->
+                        <div class="banking-card mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0">Financial Cash Flow Analytics</h5>
+                                <span class="badge badge-soft-info">Live Insights</span>
+                            </div>
+                            <div style="height: 240px;">
+                                <canvas id="monthlyActivityChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions Table -->
+                        <div class="banking-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0">Recent Account Transactions</h5>
+                                <a th:href="@{/customer/transactions}" class="text-decoration-none small text-primary fw-semibold">View All <i class="bi bi-arrow-right"></i></a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-custom align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Details / Description</th>
+                                            <th>Date</th>
+                                            <th class="text-end">Amount</th>
+                                            <th class="text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${#lists.isEmpty(recentTransactions)}">
+                                            <td colspan="5" class="text-center py-4 text-muted">No transactions found. Deposit or transfer to see activity!</td>
+                                        </tr>
+                                        <tr th:each="tx : ${recentTransactions}">
+                                            <td>
+                                                <span th:if="${tx.type.name() == 'DEPOSIT'}" class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i> Deposit</span>
+                                                <span th:if="${tx.type.name() == 'WITHDRAWAL'}" class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i> Withdrawal</span>
+                                                <span th:if="${tx.type.name() == 'TRANSFER'}" class="badge badge-soft-primary"><i class="bi bi-arrow-left-right me-1"></i> Transfer</span>
+                                                <span th:if="${tx.type.name() == 'LOAN'}" class="badge badge-soft-info"><i class="bi bi-cash-coin me-1"></i> Loan</span>
+                                                <span th:if="${tx.type.name() == 'BILL_PAYMENT'}" class="badge badge-soft-warning"><i class="bi bi-receipt me-1"></i> Bill</span>
+                                            </td>
+                                            <td>
+                                                <div class="fw-semibold text-dark small" th:text="${tx.description}">Payment description</div>
+                                                <small class="text-muted font-monospace" style="font-size: 0.72rem;" th:text="${tx.referenceNumber}">TXN123456</small>
+                                            </td>
+                                            <td class="small text-muted" th:text="${#temporals.format(tx.createdAt, 'MMM dd, HH:mm')}">Aug 26, 12:30</td>
+                                            <td class="text-end fw-bold">
+                                                <span th:if="${tx.type.name() == 'DEPOSIT' or tx.type.name() == 'LOAN' or (tx.type.name() == 'TRANSFER' and tx.receiverAccount == account.accountNumber)}"
+                                                      class="text-success">+ $<span th:text="${#numbers.formatDecimal(tx.amount, 1, 'COMMA', 2, 'POINT')}">0.00</span></span>
+                                                <span th:unless="${tx.type.name() == 'DEPOSIT' or tx.type.name() == 'LOAN' or (tx.type.name() == 'TRANSFER' and tx.receiverAccount == account.accountNumber)}"
+                                                      class="text-danger">- $<span th:text="${#numbers.formatDecimal(tx.totalAmount != null ? tx.totalAmount : tx.amount, 1, 'COMMA', 2, 'POINT')}">0.00</span></span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span th:if="${tx.status.name() == 'COMPLETED'}" class="badge badge-soft-success">Completed</span>
+                                                <span th:if="${tx.status.name() == 'PENDING'}" class="badge badge-soft-warning">Pending</span>
+                                                <span th:if="${tx.status.name() == 'FAILED'}" class="badge badge-soft-danger">Failed</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Card Preview & Widgets -->
+                    <div class="col-lg-4">
+                        <!-- Primary Virtual Card Widget -->
+                        <div class="banking-card mb-4 p-3 text-center">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold mb-0">Active Card</h6>
+                                <a th:href="@{/customer/cards}" class="text-decoration-none small text-primary">Manage Cards</a>
+                            </div>
+
+                            <div th:if="${!#lists.isEmpty(cards)}" class="virtual-card card-debit-bg text-start mx-auto mb-2" style="max-width: 100%; height: 190px;">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <span class="small opacity-75" th:text="${cards[0].cardType}">PLATINUM DEBIT</span>
+                                    <i class="bi bi-wifi fs-5"></i>
+                                </div>
+                                <div class="card-chip my-1"></div>
+                                <div class="card-num fs-6" th:text="${cards[0].cardNumberMasked}">4532 •••• •••• 8812</div>
+                                <div class="d-flex justify-content-between align-items-end mt-2">
+                                    <div>
+                                        <div class="small opacity-75" style="font-size: 0.6rem;">CARD HOLDER</div>
+                                        <div class="card-holder-name small" th:text="${cards[0].cardHolderName}">ALEXANDER WRIGHT</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="small opacity-75" style="font-size: 0.6rem;">EXPIRES</div>
+                                        <div class="card-expiry small" th:text="${cards[0].expiryDate}">08/29</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div th:if="${#lists.isEmpty(cards)}" class="py-4 text-muted small">
+                                <i class="bi bi-credit-card fs-2 d-block mb-2"></i>
+                                No active card found.
+                                <div class="mt-2">
+                                    <a th:href="@{/customer/cards}" class="btn btn-sm btn-outline-primary rounded-pill">Request a Card</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cash Flow Proportion (Doughnut) -->
+                        <div class="banking-card mb-4">
+                            <h6 class="fw-bold mb-3">Inflow vs Outflow Ratio</h6>
+                            <div style="height: 180px;">
+                                <canvas id="cashFlowChart" 
+                                        th:attr="data-income=${totalIncome},data-expenses=${totalExpenses}"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Active Credit & Loan Overview -->
+                        <div class="banking-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold mb-0">Loan & Credit Facilities</h6>
+                                <a th:href="@{/customer/loans}" class="text-decoration-none small text-primary">Apply</a>
+                            </div>
+                            <div th:if="${#lists.isEmpty(loans)}" class="text-muted small text-center py-3">
+                                No active loans. Need financing? <br>
+                                <a th:href="@{/customer/loans}" class="fw-semibold text-primary">Apply in minutes</a>
+                            </div>
+                            <div th:each="loan : ${loans}" class="p-2 border rounded-3 mb-2 bg-light">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold small" th:text="${loan.loanType.displayName}">Personal Loan</span>
+                                    <span th:if="${loan.status.name() == 'APPROVED'}" class="badge badge-soft-success">Active</span>
+                                    <span th:if="${loan.status.name() == 'PENDING'}" class="badge badge-soft-warning">Under Review</span>
+                                    <span th:if="${loan.status.name() == 'REJECTED'}" class="badge badge-soft-danger">Rejected</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-1 small text-muted">
+                                    <span>Principal: $<span th:text="${loan.requestedAmount}">15,000.00</span></span>
+                                    <span>EMI: $<span th:text="${loan.monthlyEmi}">695.78</span>/mo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 & Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/charts.js}"></script>
+</body>
+</html>

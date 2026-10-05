@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Apex Horizon Online Banking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/banking-theme.css}">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                
+                <div class="banking-card p-4 p-sm-5 shadow-lg border-0">
+                    <!-- Brand Icon & Title -->
+                    <div class="text-center mb-4">
+                        <div class="brand-icon mx-auto mb-3" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                            <i class="bi bi-shield-lock-fill"></i>
+                        </div>
+                        <h3 class="fw-bold mb-1">Welcome Back</h3>
+                        <p class="text-muted small">Sign in to your Apex Horizon Online Banking portal</p>
+                    </div>
+
+                    <!-- Flash Alerts -->
+                    <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+                    <!-- Quick Demo Credentials Box -->
+                    <div class="p-3 mb-4 rounded-3 border bg-light">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold text-dark"><i class="bi bi-magic text-primary me-1"></i> Quick 1-Click Demo Fill:</span>
+                        </div>
+                        <div class="d-grid gap-2 d-sm-flex">
+                            <button type="button" id="fillCustomerCredentials" class="btn btn-outline-primary btn-sm flex-fill">
+                                <i class="bi bi-person me-1"></i> Customer Login
+                            </button>
+                            <button type="button" id="fillAdminCredentials" class="btn btn-outline-danger btn-sm flex-fill">
+                                <i class="bi bi-shield-shaded me-1"></i> Admin Login
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form th:action="@{/login}" method="post">
+                        <!-- CSRF Token handled automatically by Spring Security -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold small">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                <input type="email" id="email" name="email" class="form-control form-control-custom border-start-0" 
+                                       placeholder="name@bankdemo.com" required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label for="password" class="form-label fw-semibold small mb-1">Password</label>
+                                <a href="#" class="small text-decoration-none text-muted" onclick="alert('For demo accounts, use password Customer@123 or Admin@123'); return false;">Forgot?</a>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+                                <input type="password" id="password" name="password" class="form-control form-control-custom border-start-0" 
+                                       placeholder="••••••••••••" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-bank w-100 py-3 rounded-3 fw-bold mb-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Sign In to Account
+                        </button>
+                    </form>
+
+                    <div class="text-center pt-3 border-top">
+                        <span class="text-muted small">New to Apex Horizon Bank? </span>
+                        <a th:href="@{/register}" class="fw-bold text-decoration-none text-primary small">Open an Account</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

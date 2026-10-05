@@ -1,0 +1,583 @@
+/* ===================================================================
+   Apex Horizon Bank - Modern Fintech Design System
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-navy: #0b192c;
+  --primary-dark: #07101e;
+  --primary-blue: #1e3e62;
+  --accent-gold: #e5a93c;
+  --accent-cyan: #06b6d4;
+  --accent-indigo: #6366f1;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
+  --bg-light: #f4f7fb;
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --border-focus: #3b82f6;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.12);
+  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.25);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6, .brand-font {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--primary-navy);
+}
+
+/* ===================================================================
+   Navbar & Header
+   =================================================================== */
+.navbar-banking {
+  background: rgba(11, 25, 44, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff !important;
+  letter-spacing: -0.5px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+}
+
+.nav-link-custom {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ===================================================================
+   Layout: Sidebar & Main Area
+   =================================================================== */
+.app-container {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 65px);
+}
+
+.sidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar-admin {
+  background: var(--primary-navy);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-admin .sidebar-heading {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-admin .nav-item-link {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar-admin .nav-item-link:hover, .sidebar-admin .nav-item-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.sidebar-heading {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.5rem 0.85rem;
+  margin-top: 1rem;
+}
+
+.nav-item-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.65rem 0.85rem;
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.92rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 3px;
+  transition: all 0.2s ease;
+}
+
+.nav-item-link i {
+  font-size: 1.15rem;
+  width: 22px;
+  text-align: center;
+}
+
+.nav-item-link:hover {
+  background: #f1f5f9;
+  color: var(--primary-navy);
+  transform: translateX(3px);
+}
+
+.nav-item-link.active {
+  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(11, 25, 44, 0.2);
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  max-width: 100%;
+}
+
+/* ===================================================================
+   Cards & UI Surfaces
+   =================================================================== */
+.banking-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.banking-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.metric-card {
+  border-left: 4px solid var(--primary-blue);
+}
+
+.metric-card.metric-success { border-left-color: var(--accent-emerald); }
+.metric-card.metric-warning { border-left-color: var(--accent-gold); }
+.metric-card.metric-danger  { border-left-color: var(--accent-rose); }
+.metric-card.metric-info    { border-left-color: var(--accent-cyan); }
+
+.metric-value {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--primary-navy);
+  line-height: 1.2;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* ===================================================================
+   Realistic 3D Banking Cards
+   =================================================================== */
+.virtual-card-wrapper {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 360px;
+  height: 210px;
+  margin-bottom: 1.5rem;
+}
+
+.virtual-card {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  color: #ffffff;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.4s ease;
+  overflow: hidden;
+}
+
+.virtual-card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.card-debit-bg {
+  background: linear-gradient(135deg, #0b192c 0%, #1e3e62 60%, #000000 100%);
+}
+
+.card-credit-bg {
+  background: linear-gradient(135deg, #2b1055 0%, #7597de 100%);
+}
+
+.card-gold-bg {
+  background: linear-gradient(135deg, #8a5a00 0%, #d4af37 50%, #573a00 100%);
+}
+
+.card-chip {
+  width: 40px;
+  height: 30px;
+  background: linear-gradient(135deg, #e5a93c, #ffe4a0);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-chip::after {
+  content: '';
+  position: absolute;
+  top: 35%;
+  left: 0;
+  right: 0;
+  height: 30%;
+  border-top: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.card-num {
+  font-family: 'Courier New', monospace;
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.card-holder-name {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.card-expiry {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+/* ===================================================================
+   Badges, Statuses & Tables
+   =================================================================== */
+.badge-soft-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 20px;
+}
+
+.badge-soft-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 20px;
+}
+
+.badge-soft-danger {
+  background-color: #ffe4e6;
+  color: #9f1239;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 20px;
+}
+
+.badge-soft-info {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 20px;
+}
+
+.badge-soft-secondary {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 20px;
+}
+
+.table-custom {
+  margin-bottom: 0;
+}
+
+.table-custom thead th {
+  background-color: #f8fafc;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1rem;
+}
+
+.table-custom tbody td {
+  padding: 0.95rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.table-custom tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* ===================================================================
+   Buttons & Form Controls
+   =================================================================== */
+.btn-primary-bank {
+  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 4px 12px rgba(11, 25, 44, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-primary-bank:hover {
+  background: linear-gradient(135deg, #132a48, #2a5384);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 25, 44, 0.35);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-accent:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(6, 182, 212, 0.45);
+}
+
+.form-control-custom, .form-select-custom {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.95rem;
+  font-size: 0.92rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control-custom:focus, .form-select-custom:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+}
+
+/* ===================================================================
+   Landing Page Hero & Feature Elements
+   =================================================================== */
+.hero-section {
+  background: radial-gradient(circle at 80% 20%, #1e3e62 0%, #0b192c 60%, #07101e 100%);
+  color: #ffffff;
+  padding: 5rem 0 6rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.feature-box {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.feature-box:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.feature-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ===================================================================
+   Quick Transfer / Action Widgets
+   =================================================================== */
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 0.8rem;
+  color: var(--primary-navy);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.quick-action-btn:hover {
+  background: #f8fafc;
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.quick-action-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+/* ===================================================================
+   Footer
+   =================================================================== */
+.footer-banking {
+  background: var(--primary-dark);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 4rem 0 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.9rem;
+}
+
+.footer-banking h5 {
+  color: #ffffff;
+  font-size: 1.05rem;
+  margin-bottom: 1.25rem;
+}
+
+.footer-banking a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-banking a:hover {
+  color: var(--accent-cyan);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .app-container {
+    flex-direction: column;
+  }
+  .hero-title {
+    font-size: 2.4rem;
+  }
+}

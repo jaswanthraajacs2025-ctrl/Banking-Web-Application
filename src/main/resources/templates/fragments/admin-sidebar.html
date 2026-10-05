@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="adminSidebar(activePage)" class="sidebar sidebar-admin">
+    <div class="px-2 py-3 mb-3 border-bottom border-secondary">
+        <div class="d-flex align-items-center gap-2">
+            <div class="rounded-3 p-2 bg-danger text-white">
+                <i class="bi bi-shield-lock-fill fs-5"></i>
+            </div>
+            <div>
+                <h6 class="text-white fw-bold mb-0">Apex Admin</h6>
+                <small class="text-white-50" style="font-size: 0.72rem;">Management Console</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-heading">Operations</div>
+    <a th:href="@{/admin/dashboard}" class="nav-item-link" th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+    <a th:href="@{/admin/customers}" class="nav-item-link" th:classappend="${activePage == 'customers'} ? 'active' : ''">
+        <i class="bi bi-people-fill"></i> Customers
+    </a>
+    <a th:href="@{/admin/accounts}" class="nav-item-link" th:classappend="${activePage == 'accounts'} ? 'active' : ''">
+        <i class="bi bi-bank2"></i> Bank Accounts
+    </a>
+    <a th:href="@{/admin/transactions}" class="nav-item-link" th:classappend="${activePage == 'transactions'} ? 'active' : ''">
+        <i class="bi bi-receipt-cutoff"></i> Transactions Log
+    </a>
+
+    <div class="sidebar-heading">Credit & Cards</div>
+    <a th:href="@{/admin/loans}" class="nav-item-link" th:classappend="${activePage == 'loans'} ? 'active' : ''">
+        <i class="bi bi-file-earmark-check"></i> Loan Applications
+    </a>
+    <a th:href="@{/admin/cards}" class="nav-item-link" th:classappend="${activePage == 'cards'} ? 'active' : ''">
+        <i class="bi bi-credit-card-fill"></i> Issued Cards
+    </a>
+
+    <div class="sidebar-heading">Intelligence & Control</div>
+    <a th:href="@{/admin/reports}" class="nav-item-link" th:classappend="${activePage == 'reports'} ? 'active' : ''">
+        <i class="bi bi-graph-up-arrow"></i> Financial Reports
+    </a>
+    <a th:href="@{/admin/audit-logs}" class="nav-item-link" th:classappend="${activePage == 'audit-logs'} ? 'active' : ''">
+        <i class="bi bi-journal-text"></i> Audit Logs
+    </a>
+    <a th:href="@{/admin/settings}" class="nav-item-link" th:classappend="${activePage == 'settings'} ? 'active' : ''">
+        <i class="bi bi-sliders2"></i> System Settings
+    </a>
+
+    <!-- Sign Out -->
+    <div class="mt-auto pt-3 border-top border-secondary">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-item-link text-danger border-0 bg-transparent w-100 text-start">
+                <i class="bi bi-box-arrow-right"></i> Admin Sign Out
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

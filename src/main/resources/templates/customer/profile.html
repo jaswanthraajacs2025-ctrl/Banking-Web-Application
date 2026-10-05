@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Apex Horizon Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/banking-theme.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="app-container">
+        <div th:replace="~{fragments/sidebar :: sidebar('profile')}"></div>
+
+        <main class="main-content">
+            <div class="container-fluid p-0">
+                <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">Customer Profile</h2>
+                        <p class="text-muted small mb-0">Manage your verified personal records, contact information, and KYC data.</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left: Profile Summary Card -->
+                    <div class="col-lg-4">
+                        <div class="banking-card text-center p-4">
+                            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white fw-bold shadow-lg"
+                                 style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo)); font-size: 2rem;">
+                                <span th:text="${#strings.substring(user.fullName, 0, 1)}">A</span>
+                            </div>
+                            <h4 class="fw-bold mb-1" th:text="${user.fullName}">Alexander Wright</h4>
+                            <p class="text-muted small mb-2" th:text="${user.email}">customer@bankdemo.com</p>
+                            <span class="badge badge-soft-success px-3 py-1 rounded-pill mb-3">KYC Verified Customer</span>
+
+                            <hr>
+
+                            <div class="text-start small">
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Customer ID:</span>
+                                    <strong class="font-monospace" th:text="${user.customerId}">CUST100881</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Account No:</span>
+                                    <strong class="font-monospace" th:if="${account != null}" th:text="${account.accountNumber}">ACC1000889901</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Registered On:</span>
+                                    <strong th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">10 Aug 2026</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Edit Profile Form -->
+                    <div class="col-lg-8">
+                        <div class="banking-card p-4">
+                            <h5 class="fw-bold mb-4"><i class="bi bi-person-gear text-primary me-2"></i> Update Contact Details</h5>
+
+                            <form th:action="@{/customer/profile/update}" th:object="${profileRequest}" method="post">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold">Full Legal Name</label>
+                                        <input type="text" th:field="*{fullName}" class="form-control form-control-custom" required>
+                                        <div class="text-danger small" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold">Email Address (Locked)</label>
+                                        <input type="email" class="form-control form-control-custom bg-light" th:value="${user.email}" disabled>
+                                        <small class="text-muted" style="font-size: 0.72rem;">Email changes require branch administrator assistance.</small>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold">Mobile Phone Number</label>
+                                        <input type="tel" th:field="*{mobileNumber}" class="form-control form-control-custom" required>
+                                        <div class="text-danger small" th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}"></div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold">Date of Birth</label>
+                                        <input type="date" th:field="*{dateOfBirth}" class="form-control form-control-custom">
+                                        <div class="text-danger small" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label small fw-semibold">Residential Address</label>
+                                        <input type="text" th:field="*{address}" class="form-control form-control-custom" required>
+                                        <div class="text-danger small" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+                                    </div>
+
+                                    <div class="col-12 pt-2">
+                                        <button type="submit" class="btn btn-primary-bank px-4 py-2 rounded-3 fw-bold">
+                                            <i class="bi bi-save me-1"></i> Save Changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

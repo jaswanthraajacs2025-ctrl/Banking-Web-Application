@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account Details - Apex Horizon Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/banking-theme.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="app-container">
+        <div th:replace="~{fragments/sidebar :: sidebar('account')}"></div>
+
+        <main class="main-content">
+            <div class="container-fluid p-0">
+                <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">Account Portfolio</h2>
+                        <p class="text-muted small mb-0">Overview of your linked checking, savings, and ledger metrics.</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/customer/transactions}" class="btn btn-outline-primary rounded-pill">
+                            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Account Statement
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left: Main Account Details Card -->
+                    <div class="col-lg-7">
+                        <div class="banking-card mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                                <div>
+                                    <span class="badge badge-soft-info mb-1" th:text="${account.accountType}">SAVINGS</span>
+                                    <h4 class="fw-bold mb-0">Primary Banking Account</h4>
+                                </div>
+                                <span class="badge badge-soft-success px-3 py-2 fs-6" th:text="${account.status}">ACTIVE</span>
+                            </div>
+
+                            <div class="row g-4 mb-4">
+                                <div class="col-sm-6">
+                                    <small class="text-muted d-block">Account Number</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold font-monospace fs-5" th:text="${account.accountNumber}">ACC1000889901</span>
+                                        <button class="btn btn-sm btn-link text-decoration-none copy-btn p-0" th:attr="data-copy=${account.accountNumber}">
+                                            <i class="bi bi-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <small class="text-muted d-block">Customer ID</small>
+                                    <span class="fw-bold font-monospace fs-5" th:text="${user.customerId}">CUST100881</span>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <small class="text-muted d-block">Total Ledger Balance</small>
+                                    <span class="fw-bold text-success fs-4">$<span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}">25,450.00</span></span>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <small class="text-muted d-block">Available Balance</small>
+                                    <span class="fw-bold text-primary fs-4">$<span th:text="${#numbers.formatDecimal(account.availableBalance, 1, 'COMMA', 2, 'POINT')}">25,450.00</span></span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-light rounded-3 border">
+                                <h6 class="fw-bold mb-2"><i class="bi bi-building me-1 text-primary"></i> Branch & Routing Information</h6>
+                                <div class="row g-2 small">
+                                    <div class="col-sm-6">
+                                        <span class="text-muted">Branch Name: </span>
+                                        <strong th:text="${account.branchName}">Apex Horizon Boston Metro</strong>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="text-muted">IFSC / Routing Code: </span>
+                                        <strong class="font-monospace" th:text="${account.ifscCode}">APEX0008822</strong>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="text-muted">Currency: </span>
+                                        <strong th:text="${account.currency}">USD ($)</strong>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="text-muted">Account Opened: </span>
+                                        <strong th:text="${#temporals.format(account.createdAt, 'dd MMM yyyy')}">10 Aug 2026</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Limits and Features Card -->
+                    <div class="col-lg-5">
+                        <div class="banking-card mb-4">
+                            <h5 class="fw-bold mb-3"><i class="bi bi-speedometer text-warning me-2"></i> Transaction Limits</h5>
+
+                            <div class="mb-3 pb-3 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="small fw-semibold">Daily Transfer Limit</span>
+                                    <span class="fw-bold text-primary">$<span th:text="${#numbers.formatDecimal(account.dailyTransferLimit, 1, 'COMMA', 2, 'POINT')}">50,000.00</span></span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 25%"></div>
+                                </div>
+                                <small class="text-muted" style="font-size: 0.72rem;">25% used today</small>
+                            </div>
+
+                            <div class="mb-3 pb-3 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="small fw-semibold">Daily Cash ATM Limit</span>
+                                    <span class="fw-bold text-success">$5,000.00</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 15%"></div>
+                                </div>
+                                <small class="text-muted" style="font-size: 0.72rem;">15% used today</small>
+                            </div>
+
+                            <div class="p-3 bg-light rounded-3 border">
+                                <h6 class="fw-bold small mb-2"><i class="bi bi-shield-check text-success me-1"></i> Account Protection</h6>
+                                <p class="text-muted small mb-0">
+                                    Your account is fully insured and monitored 24/7 by Apex Horizon Fraud Intelligence. Need to raise limits? Contact customer service.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

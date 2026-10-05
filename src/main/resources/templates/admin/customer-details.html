@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Customer 360: ' + ${customer.fullName} + ' - Apex Horizon Admin'">Customer 360</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/banking-theme.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="app-container">
+        <div th:replace="~{fragments/admin-sidebar :: adminSidebar('customers')}"></div>
+
+        <main class="main-content">
+            <div class="container-fluid p-0">
+                <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+                <!-- Breadcrumb & Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <a th:href="@{/admin/customers}" class="text-decoration-none small text-muted mb-1 d-inline-block">
+                            <i class="bi bi-arrow-left"></i> Back to Customers List
+                        </a>
+                        <h2 class="fw-bold mb-0">Customer 360 Profile: <span th:text="${customer.fullName}">Alexander Wright</span></h2>
+                    </div>
+
+                    <!-- Destructive Action Controls -->
+                    <div class="d-flex gap-2">
+                        <!-- Toggle Suspend/Activate -->
+                        <form th:action="@{/admin/customers/{id}/toggle-status(id=${customer.id})}" method="post"
+                              onsubmit="return confirm('Are you sure you want to change this customer status?');">
+                            <input type="hidden" name="enabled" th:value="${!customer.enabled}">
+                            <button type="submit" class="btn btn-sm rounded-pill px-3"
+                                    th:classappend="${customer.enabled} ? 'btn-outline-danger' : 'btn-outline-success'">
+                                <i class="bi" th:classappend="${customer.enabled} ? 'bi-slash-circle' : 'bi-check-circle'"></i>
+                                <span th:text="${customer.enabled} ? 'Suspend Customer' : 'Activate Customer'">Suspend</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left: Identity & Account Summary -->
+                    <div class="col-lg-4">
+                        <div class="banking-card mb-4 text-center">
+                            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white fw-bold shadow"
+                                 style="width: 72px; height: 72px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo)); font-size: 1.8rem;">
+                                <span th:text="${#strings.substring(customer.fullName, 0, 1)}">A</span>
+                            </div>
+                            <h4 class="fw-bold mb-1" th:text="${customer.fullName}">Alexander Wright</h4>
+                            <p class="text-muted small mb-2" th:text="${customer.email}">customer@bankdemo.com</p>
+                            
+                            <div class="d-flex justify-content-center gap-2 mb-3">
+                                <span th:if="${customer.enabled}" class="badge badge-soft-success">User Active</span>
+                                <span th:unless="${customer.enabled}" class="badge badge-soft-danger">User Suspended</span>
+                                <span class="badge badge-soft-info" th:text="${customer.role}">ROLE_CUSTOMER</span>
+                            </div>
+
+                            <hr>
+
+                            <div class="text-start small">
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Customer ID:</span>
+                                    <strong class="font-monospace" th:text="${customer.customerId}">CUST100881</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Phone:</span>
+                                    <strong th:text="${customer.mobileNumber}">+1 555-234-5678</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Date of Birth:</span>
+                                    <strong th:text="${customer.dateOfBirth != null ? #temporals.format(customer.dateOfBirth, 'dd MMM yyyy') : 'N/A'}">20 Aug 1992</strong>
+                                </div>
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Address:</span>
+                                    <strong class="text-end" th:text="${customer.address}">Boston, MA</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Card -->
+                        <div class="banking-card" th:if="${account != null}">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold mb-0">Bank Account</h6>
+                                <span th:if="${account.status.name() == 'ACTIVE'}" class="badge badge-soft-success">ACTIVE</span>
+                                <span th:unless="${account.status.name() == 'ACTIVE'}" class="badge badge-soft-danger" th:text="${account.status}">FROZEN</span>
+                            </div>
+
+                            <div class="p-3 bg-light rounded-3 mb-3 border">
+                                <small class="text-muted d-block">Account Number</small>
+                                <span class="fw-bold font-monospace fs-5" th:text="${account.accountNumber}">ACC1000889901</span>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted">Ledger Balance:</small>
+                                    <strong class="text-success fs-5">$<span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}">25,450.00</span></strong>
+                                </div>
+                            </div>
+
+                            <!-- Freeze/Unfreeze Account Form -->
+                            <form th:action="@{/admin/accounts/{id}/status(id=${account.id})}" method="post"
+                                  onsubmit="return confirm('Confirm account status change?');">
+                                <input type="hidden" name="status" th:value="${account.status.name() == 'ACTIVE' ? 'FROZEN' : 'ACTIVE'}">
+                                <button type="submit" class="btn btn-sm w-100"
+                                        th:classappend="${account.status.name() == 'ACTIVE'} ? 'btn-outline-danger' : 'btn-outline-success'">
+                                    <i class="bi" th:classappend="${account.status.name() == 'ACTIVE'} ? 'bi-snow2' : 'bi-sun'"></i>
+                                    <span th:text="${account.status.name() == 'ACTIVE'} ? 'Freeze Bank Account' : 'Unfreeze Bank Account'">Freeze Account</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right: Cards, Loans & Transactions -->
+                    <div class="col-lg-8">
+                        <!-- Cards & Loans Row -->
+                        <div class="row g-3 mb-4">
+                            <!-- Cards -->
+                            <div class="col-md-6">
+                                <div class="banking-card h-100 p-3">
+                                    <h6 class="fw-bold mb-3"><i class="bi bi-credit-card text-primary me-1"></i> Issued Cards</h6>
+                                    <div th:if="${#lists.isEmpty(cards)}" class="text-muted small py-3 text-center">No cards issued.</div>
+                                    <div th:each="c : ${cards}" class="p-2 border rounded-3 mb-2 bg-light d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="fw-bold small" th:text="${c.cardType}">DEBIT</span>
+                                            <div class="font-monospace text-muted" style="font-size: 0.75rem;" th:text="${c.cardNumberMasked}">4532 •••• 8812</div>
+                                        </div>
+                                        <span class="badge" th:classappend="${c.status.name() == 'ACTIVE'} ? 'badge-soft-success' : 'badge-soft-danger'" th:text="${c.status}">ACTIVE</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Loans -->
+                            <div class="col-md-6">
+                                <div class="banking-card h-100 p-3">
+                                    <h6 class="fw-bold mb-3"><i class="bi bi-cash-coin text-warning me-1"></i> Loan History</h6>
+                                    <div th:if="${#lists.isEmpty(loans)}" class="text-muted small py-3 text-center">No loans applied.</div>
+                                    <div th:each="l : ${loans}" class="p-2 border rounded-3 mb-2 bg-light d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="fw-bold small" th:text="${l.loanType.displayName}">Personal Loan</span>
+                                            <div class="font-monospace text-muted" style="font-size: 0.75rem;">$<span th:text="${l.requestedAmount}">15000</span> (<span th:text="${l.tenureMonths}">24</span>m)</div>
+                                        </div>
+                                        <span class="badge" th:classappend="${l.status.name() == 'APPROVED'} ? 'badge-soft-success' : (l.status.name() == 'PENDING' ? 'badge-soft-warning' : 'badge-soft-danger')" th:text="${l.status}">APPROVED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <div class="banking-card p-0 overflow-hidden shadow-sm">
+                            <div class="p-3 border-bottom bg-light">
+                                <h6 class="fw-bold mb-0">Customer Transaction History</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Reference</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th class="text-end">Amount</th>
+                                            <th class="text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${#lists.isEmpty(recentTransactions)}">
+                                            <td colspan="6" class="text-center py-4 text-muted">No transactions found.</td>
+                                        </tr>
+                                        <tr th:each="tx : ${recentTransactions}">
+                                            <td class="small text-muted" th:text="${#temporals.format(tx.createdAt, 'dd MMM HH:mm')}">26 Aug</td>
+                                            <td class="font-monospace small" th:text="${tx.referenceNumber}">TXN123456</td>
+                                            <td>
+                                                <span class="badge badge-soft-info" th:text="${tx.type}">TRANSFER</span>
+                                            </td>
+                                            <td class="small" th:text="${tx.description}">Description</td>
+                                            <td class="text-end font-monospace fw-bold">$<span th:text="${tx.amount}">500.00</span></td>
+                                            <td class="text-center">
+                                                <span class="badge badge-soft-success" th:text="${tx.status}">COMPLETED</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

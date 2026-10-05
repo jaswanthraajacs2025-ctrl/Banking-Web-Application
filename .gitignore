@@ -1,0 +1,41 @@
+# Compiled class files
+target/
+*.class
+
+# Log files
+*.log
+logs/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual Machine crash logs
+hs_err_pid*
+replay_pid*
+
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.DS_Store
+Thumbs.db
+
+# Environment & local configurations
+.env
+*.local
+
+# Temporary files
+0
+*.tmp
+*.bak

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar(activePage)" class="sidebar">
+    <!-- User Quick Summary -->
+    <div class="p-3 mb-3 bg-light rounded-3 text-center border">
+        <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm"
+             style="width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo)); font-size: 1.3rem;">
+            <span th:if="${currentUser != null}" th:text="${#strings.substring(currentUser.fullName, 0, 1)}">A</span>
+            <span th:if="${currentUser == null}">U</span>
+        </div>
+        <h6 class="fw-bold mb-0 text-truncate" th:if="${currentUser != null}" th:text="${currentUser.fullName}">Alexander Wright</h6>
+        <span class="badge badge-soft-success small mt-1" th:if="${currentUser != null && currentUser.account != null}" th:text="${currentUser.account.status}">ACTIVE</span>
+        <div class="small text-muted mt-1 font-monospace" style="font-size: 0.75rem;" th:if="${currentUser != null && currentUser.account != null}" th:text="${currentUser.account.accountNumber}">ACC1000889901</div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="sidebar-heading">Core Banking</div>
+    <a th:href="@{/customer/dashboard}" class="nav-item-link" th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
+        <i class="bi bi-grid-1x2"></i> Dashboard
+    </a>
+    <a th:href="@{/customer/account}" class="nav-item-link" th:classappend="${activePage == 'account'} ? 'active' : ''">
+        <i class="bi bi-wallet2"></i> My Account
+    </a>
+    <a th:href="@{/customer/transfer}" class="nav-item-link" th:classappend="${activePage == 'transfer'} ? 'active' : ''">
+        <i class="bi bi-arrow-left-right"></i> Transfer Funds
+    </a>
+    <a th:href="@{/customer/deposit}" class="nav-item-link" th:classappend="${activePage == 'deposit'} ? 'active' : ''">
+        <i class="bi bi-box-arrow-down"></i> Deposit Money
+    </a>
+    <a th:href="@{/customer/withdraw}" class="nav-item-link" th:classappend="${activePage == 'withdraw'} ? 'active' : ''">
+        <i class="bi bi-box-arrow-up"></i> Cash Withdrawal
+    </a>
+    <a th:href="@{/customer/transactions}" class="nav-item-link" th:classappend="${activePage == 'transactions'} ? 'active' : ''">
+        <i class="bi bi-clock-history"></i> Transactions
+    </a>
+
+    <div class="sidebar-heading">Financial Tools</div>
+    <a th:href="@{/customer/beneficiaries}" class="nav-item-link" th:classappend="${activePage == 'beneficiaries'} ? 'active' : ''">
+        <i class="bi bi-people"></i> Beneficiaries
+    </a>
+    <a th:href="@{/customer/cards}" class="nav-item-link" th:classappend="${activePage == 'cards'} ? 'active' : ''">
+        <i class="bi bi-credit-card-2-front"></i> Cards Center
+    </a>
+    <a th:href="@{/customer/loans}" class="nav-item-link" th:classappend="${activePage == 'loans'} ? 'active' : ''">
+        <i class="bi bi-cash-coin"></i> Loans & Credit
+    </a>
+
+    <div class="sidebar-heading">Account & Security</div>
+    <a th:href="@{/customer/notifications}" class="nav-item-link d-flex justify-content-between" th:classappend="${activePage == 'notifications'} ? 'active' : ''">
+        <span><i class="bi bi-bell"></i> Notifications</span>
+        <span th:if="${unreadNotificationCount > 0}" class="badge bg-danger rounded-pill" th:text="${unreadNotificationCount}">3</span>
+    </a>
+    <a th:href="@{/customer/profile}" class="nav-item-link" th:classappend="${activePage == 'profile'} ? 'active' : ''">
+        <i class="bi bi-person-badge"></i> My Profile
+    </a>
+    <a th:href="@{/customer/settings}" class="nav-item-link" th:classappend="${activePage == 'settings'} ? 'active' : ''">
+        <i class="bi bi-shield-lock"></i> Security Settings
+    </a>
+
+    <!-- Sign Out -->
+    <div class="mt-auto pt-3 border-top">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-item-link text-danger border-0 bg-transparent w-100 text-start">
+                <i class="bi bi-box-arrow-right"></i> Sign Out
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

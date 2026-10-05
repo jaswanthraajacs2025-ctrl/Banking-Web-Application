@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="footer-banking mt-auto">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div class="brand-icon">
+                        <i class="bi bi-bank"></i>
+                    </div>
+                    <span class="text-white fw-bold fs-5">Apex<span style="color: var(--accent-cyan);">Horizon</span></span>
+                </div>
+                <p class="small text-white-50">
+                    A next-generation enterprise digital banking platform engineered with Java Spring Boot, Hibernate, and modern security architecture. Designed for seamless, secure retail and commercial financial management.
+                </p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-github"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-shield-check"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a th:href="@{/}">Home</a></li>
+                    <li class="mb-2"><a th:href="@{/about}">About Us</a></li>
+                    <li class="mb-2"><a th:href="@{/services}">Digital Services</a></li>
+                    <li class="mb-2"><a th:href="@{/contact}">Support Center</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h5>Financial Solutions</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a th:href="@{/register}">Savings Account</a></li>
+                    <li class="mb-2"><a th:href="@{/register}">Current Account</a></li>
+                    <li class="mb-2"><a th:href="@{/services}">Smart Instant Transfers</a></li>
+                    <li class="mb-2"><a th:href="@{/services}">Home & Personal Loans</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h5>Security & Demo Info</h5>
+                <p class="small text-white-50 mb-2">
+                    <i class="bi bi-shield-fill-check text-success me-1"></i> 256-Bit SSL End-to-End Encryption
+                </p>
+                <p class="small text-white-50 mb-2">
+                    <i class="bi bi-lock-fill text-warning me-1"></i> BCrypt Password Security
+                </p>
+                <div class="p-2 bg-dark rounded border border-secondary mt-2">
+                    <div class="text-white-50 small">Support Desk Hotline:</div>
+                    <div class="text-white fw-bold">+1 (800) 555-APEX</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-3 border-top border-secondary text-center small text-white-50">
+            &copy; 2026 Apex Horizon Online Banking. All rights reserved. Full Java Enterprise Online Banking Project.
+        </div>
+    </div>
+</footer>
+</body>
+</html>
